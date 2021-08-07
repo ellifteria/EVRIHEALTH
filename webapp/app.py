@@ -11,7 +11,7 @@ app.secret_key = "98hgjNXB12"
 def create_pdf_id():
     current_time = str(datetime.datetime.now().strftime("%H_%M_%S"))
     remote_address = str(request.remote_addr.replace(".", "_"))
-    random_number = str(random.randint(1000, 9999))
+    random_number = str(random.randint(10000, 99999))
     pdf_id = "{}__{}__{}.pdf".format(current_time, remote_address, random_number)
     return pdf_id
 
@@ -40,26 +40,6 @@ def redirect_to_home():
 @app.route("/home")
 def home():
     create_blank_session()
-    my_data = {
-        0: {
-            "hello": [10, 100],
-            "howdy": [100, 5]
-        },
-        1: None,
-        2: {
-            "yia": [10, 100],
-            "nihao": [100, 5]
-        },
-        3: {
-            "annyeonghaseyeo": [10, 100],
-            "konnichiwa": [100, 5]
-        },
-        4: {
-            "namaste": [10, 100],
-            "salaam": [100, 5]
-        }
-    }
-    createpdf.create_pdf(session['pdf_id'], "Doc1.pdf", my_data)
     return render_template("home.html")
 
 #TODO: create about us page
@@ -79,7 +59,6 @@ def financially_indignant_result():
     if request.method == "POST":
         session['household_size'] = household_size = int(request.form["household_size"])
         session['estimated_annual_income'] = estimated_annual_income = int(request.form["estimated_annual_income"])
-        #TODO: store form data in session to grab later for medically indignant and/or pdf creation
         if charitycarealgorithm.determine_financially_indignant(household_size, estimated_annual_income) != 0:
             return "You qualify!"
             #TODO: create results page to redirect to pdf creation page
@@ -105,7 +84,6 @@ def medically_indignant_result():
         session['household_size'] = household_size = int(request.form["household_size"])
         session['estimated_annual_income'] = estimated_annual_income = int(request.form["estimated_annual_income"])
         session['balance_due'] = balance_due = int(request.form["balance_due"])
-        #TODO: store form data in session to grab later for medically indignant and/or pdf creation
         if charitycarealgorithm.determine_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
             if charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
                 return "You qualify for catastrophic medically indignant financial assistance!"
