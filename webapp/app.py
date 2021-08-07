@@ -3,6 +3,7 @@ import datetime
 import random
 
 import charitycarealgorithm
+import createpdf
 
 app = Flask(__name__)
 app.secret_key = "98hgjNXB12"
@@ -16,7 +17,7 @@ def create_pdf_id():
 
 def create_session():
     if 'pdf_id' not in session:
-        create_pdf_id()
+        session['pdf_id'] = create_pdf_id()
     if 'household_size' not in session:
         session['household_size'] = 1
     if 'estimated_annual_income' not in session:
@@ -26,7 +27,7 @@ def create_session():
 
 def create_blank_session():
     if 'pdf_id' not in session:
-        create_pdf_id()
+        session['pdf_id'] = create_pdf_id()
     session['household_size'] = 1
     session['estimated_annual_income'] = 0
     session['balance_due'] = 0
@@ -39,6 +40,26 @@ def redirect_to_home():
 @app.route("/home")
 def home():
     create_blank_session()
+    my_data = {
+        0: {
+            "hello": [10, 100],
+            "howdy": [100, 5]
+        },
+        1: None,
+        2: {
+            "yia": [10, 100],
+            "nihao": [100, 5]
+        },
+        3: {
+            "annyeonghaseyeo": [10, 100],
+            "konnichiwa": [100, 5]
+        },
+        4: {
+            "namaste": [10, 100],
+            "salaam": [100, 5]
+        }
+    }
+    createpdf.create_pdf(session['pdf_id'], "Doc1.pdf", my_data)
     return render_template("home.html")
 
 #TODO: create about us page
