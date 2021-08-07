@@ -242,7 +242,7 @@ def fill_out_THP_application(
             [lost_time, 5.9*inch, LETTER[1] - 6.2*inch]
         ]
     }
-    create_pdf(pdf_id, "THP Website Charity Application English.pdf", patient_data)
+    create_pdf(pdf_id, "static/THP Website Charity Application English.pdf", patient_data)
 
 def fill_out_charitycare_application(
         pdf_id, curr_date, guarantor_name, last_name, first_name, MI, DOS,
@@ -465,7 +465,7 @@ def fill_out_charitycare_application(
             [lost_time, 5.9*inch, LETTER[1] - 6.2*inch]
         ]
     }
-    create_pdf(pdf_id, "Website Charity Application English.pdf", patient_data)
+    create_pdf(pdf_id, "static/Website Charity Application English.pdf", patient_data)
 
 def fill_out_USMDAcharitycare_application(
         pdf_id, curr_date, guarantor_name, last_name, first_name, MI, DOS,
@@ -663,17 +663,4 @@ def fill_out_USMDAcharitycare_application(
             [lost_time, 5.9*inch, LETTER[1] - 6.33*inch]
         ]
     }
-    create_pdf(pdf_id, "Website Charity Application USMD Arlington English.pdf", patient_data)
-
-fill_out_USMDAcharitycare_application(
-    "test1.pdf", "8/7/2021", "Guarantor", "Last", "First", "M", "8/7/2021",
-    "12345", "12345", "123456789", "6/2/1997", "Married",
-    "Yes", "Yes", "No", "No", "No", "No", "Yes", "2 weeks", "No", "Spouse Name",
-    "Child 1 Name", " 1", "Child 2 Name", "2", "Child 3 Name", "3",
-    "Child 4 Name", "4", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000",
-    "1100", "1200", "1300", "1400", "1500", "1600", "1700", "1800", "1900", "2000", "2100", "2200",
-    "2300", "2400", "2500", "2600", "2700", "2800", "2900", "3000", "3100", "3200", "3300", "3400",
-    "3500","3600", "3700", "3800", "3900", "4000", "My Emp", "Spo Emp", "123456789",
-    "1234567809", "123 Street Ln", "456 Lane Rd", "Job", "Other Job", "Yes", "No", "No",
-    "No", "No", "N/A", "N/A", "N/A", "1000", "2 days"
-)
+    create_pdf(pdf_id, "static/Website Charity Application USMD Arlington English.pdf", patient_data)
