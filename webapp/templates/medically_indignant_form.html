@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}
+Eligibility Test
+{% endblock %}
+{% block bodycontent %}
+<h2>Medically Indignant Eligibility Test</h2>
+<p>Unfortunately, you don't qualify for full balance discount financially indignant financial assistant. However, you may qualify for some financial assistance.</p>
+<form action="/medicallyresult" method="POST">
+    <p>Household Size: <input type="number" name="household_size" value="1" min="1" step="1"/></p>
+    <p>Estimated Annual Income: $<input type="number" name="estimated_annual_income" value="0" min="0"/></p>
+    <p>Balance Due: $<input type="number" name="balance_due" value="0" min="0"/></p>
+    <p><input type="submit" value="Submit"/></p>
+</form>
+<!--TODO: replace values with session stored values-->
+<!--TODO: add link to page to obtain estimates for hospital costs from chargemasters-->
+{% endblock bodycontent %}

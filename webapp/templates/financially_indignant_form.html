@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}
+Eligibility Test
+{% endblock %}
+{% block bodycontent %}
+<h2>Financially Indignant Eligibility Test</h2>
+<form action="/financiallyresult" method="POST">
+    <p>Household Size: <input type="number" name="household_size"  value="1" min="1" step="1"/></p>
+    <p>Estimated Annual Income: $<input type="number" name="estimated_annual_income" value="0" min="0"/></p>
+    <p><input type="submit" value="Submit"/></p>
+</form>
+{% endblock bodycontent %}

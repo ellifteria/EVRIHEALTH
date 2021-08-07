@@ -1,0 +1,87 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
+head {
+    font-family: Open Sans;
+}
+
+body {
+    margin: 0;
+    font-family: Open Sans;
+    text-align: center;
+}
+
+ul.topnav {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.18);
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: aquamarine;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+ul.topnav li {
+    float: left;
+}
+
+ul.topnav li a {
+    display: inline-block;
+    color: aliceblue;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 31px;
+}
+
+ul.topnav li .logo img {
+    height: 31px;
+} 
+
+ul.topnav li a:hover {
+    background-color: cadetblue;
+}
+
+ul.topnav li.menu {
+    display: none;
+    font-size: 31px;
+}
+
+@media screen and (max-width: 750px) {
+    ul.topnav li:not(:first-child){
+        display: none;
+    }
+    ul.topnav li.menu {
+        float: right;
+        display: block;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    ul.topnav.responsive {
+        position: fixed;
+    }
+    ul.topnav.responsive li.menu {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    ul.topnav.responsive li {
+        float: none;
+        display: inline;
+    }
+    ul.topnav.responsive li a {
+        display: block;
+        text-align: left;
+    }
+}
+
+.bodycontent {
+    margin-top: 90px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+/*TODO: styling for forms*/
