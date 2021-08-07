@@ -16,7 +16,7 @@ ul.topnav {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: aquamarine;
+    background-color: rgb(35, 65, 94);
     position: fixed;
     top: 0;
     width: 100%;
@@ -28,7 +28,7 @@ ul.topnav li {
 
 ul.topnav li a {
     display: inline-block;
-    color: aliceblue;
+    color: white;
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
@@ -41,7 +41,8 @@ ul.topnav li .logo img {
 } 
 
 ul.topnav li a:hover {
-    background-color: cadetblue;
+    background-color: rgb(46, 104, 153);
+    color: white;
 }
 
 ul.topnav li.menu {
