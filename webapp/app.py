@@ -1,12 +1,22 @@
+import re
 from flask import Flask, render_template, request, redirect, session
 import datetime
 import random
+import string
 
 import charitycarealgorithm
 import createpdf
 
 app = Flask(__name__)
-app.secret_key = "98hgjNXB12"
+secret_key = ""
+for i in range(3):
+    secret_key += str(random.randint(0,9))
+for i in range(7):
+    secret_key += random.choice(string.ascii_letters)
+for i in range(2):
+    secret_key += str(random.randint(0,9))
+app.secret_key = secret_key
+
 
 def create_pdf_id():
     current_time = str(datetime.datetime.now().strftime("%H_%M_%S"))
@@ -32,6 +42,11 @@ def create_blank_session():
     session['estimated_annual_income'] = 0
     session['balance_due'] = 0
 
+def clear_session():
+    [session.pop(key) for key in list(session.keys())]
+    session.clear()
+    create_blank_session()
+
 
 @app.route("/")
 def redirect_to_home():
@@ -56,15 +71,14 @@ def financially_indignant_form():
 
 @app.route("/financiallyresult", methods = ["POST", "GET"])
 def financially_indignant_result():
+    create_session()
     if request.method == "POST":
         session['household_size'] = household_size = int(request.form["household_size"])
         session['estimated_annual_income'] = estimated_annual_income = int(request.form["estimated_annual_income"])
         if charitycarealgorithm.determine_financially_indignant(household_size, estimated_annual_income) != 0:
-            return "You qualify!"
-            #TODO: create results page to redirect to pdf creation page
+            return render_template("financially_indignant_qualified.html")
         else:
             return redirect("/medicallytest")
-
     else:
         return redirect("/home")
 
@@ -78,26 +92,169 @@ def medically_indignant_form():
         balance_due = session['balance_due'],
     )
 
-@app.route("/medicallyresult")
+@app.route("/medicallyresult", methods = ["POST", "GET"])
 def medically_indignant_result():
+    create_session()
     if request.method == "POST":
         session['household_size'] = household_size = int(request.form["household_size"])
         session['estimated_annual_income'] = estimated_annual_income = int(request.form["estimated_annual_income"])
         session['balance_due'] = balance_due = int(request.form["balance_due"])
         if charitycarealgorithm.determine_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
             if charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
-                return "You qualify for catastrophic medically indignant financial assistance!"
-                #TODO: create results page to redirect to pdf creation page
-            return "You qualify for medically indignant financial assistance!"
-            #TODO: create results page to redirect to pdf creation page
+                return render_template(
+                    "catastrophic_medically_indignant_qualified.html",
+                    pct_discount=100*charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due)
+                )
+            return render_template(
+                    "medically_indignant_qualified.html",
+                    pct_discount=100*charitycarealgorithm.determine_medically_indignant(household_size, estimated_annual_income, balance_due)
+                )
         elif charitycarealgorithm.determine_tier2_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
-            return "You qualify for tier 2 medically indignant financial assistance!"
-            #TODO: create results page to redirect to pdf creation page
+            return render_template(
+                    "tier2_medically_indignant_qualified.html",
+                    pct_discount=100*charitycarealgorithm.determine_tier2_medically_indignant(household_size, estimated_annual_income, balance_due)
+                )
         elif charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
-            return "You qualify for catastrophic medically indignant financial assistance!"
-            #TODO: create results page to redirect to pdf creation page
+            return render_template(
+                "catastrophic_medically_indignant_qualified.html",
+                pct_discount=100*charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due)
+            )
         else:
             return "Sorry, you don't qualify"
+    else:
+        return redirect("/home")
 
+@app.route("/blankapplication")
+def blank_application():
+    return render_template("blank_application.html")
+
+@app.route("/blankapplicationTHP")
+def blank_application_THP():
+    return render_template("blank_application_THP.html")
+
+@app.route("/blankapplicationUSMDA")
+def blank_application_USMDA():
+    return render_template("blank_application_USMDA.html")
+
+@app.route("/completeapplication")
+def complete_application():
+    return render_template("application_completer.html")
+
+@app.route("/completedapplication", methods = ["POST", "GET"])
+def display_completed_application():
+    create_session()
+    if request.method == "POST":
+        application_data = {}
+        for key, value in request.form.items():
+            application_data[key] = str(value)
+        if application_data["facility"] == "USMD Hospital at Arlington":
+            createpdf.fill_out_USMDAcharitycare_application(
+                "static/" + session["pdf_id"], application_data["curr_date"], application_data["guarantor_name"],
+                application_data["last_name"], application_data["first_name"], application_data["MI"], application_data["DOS"],
+                application_data["hospital_acct"], application_data['medical_rcrd'], application_data['social_security'],
+                application_data["DOB"], application_data['marital_status'], application_data['minors'],
+                application_data["living_with"], application_data['legal_minor'], application_data['patient_employed'],
+                application_data["spouse_employed"], application_data['med_insurance'], application_data['disability'],
+                application_data["disability_length"], application_data['veteran'], application_data['spouse_name'],
+                application_data["child1_name"], application_data['child1_age'], application_data['child2_name'],
+                application_data["child2_age"], application_data['child3_name'], application_data['child3_age'],
+                application_data["child4_name"], application_data['child4_age'], application_data['patient_gross'],
+                application_data["patient_net"], application_data['spouse_gross'], application_data['spouse_net'],
+                application_data["dependants_gross"], application_data['dependants_net'], application_data['pub_asst_gross'],
+                application_data["pub_asst_net"], application_data['food_stamps_gross'], application_data['food_stamps_net'],
+                application_data["soc_serc_gross"], application_data['soc_serc_net'], application_data['unemp_gross'],
+                application_data["unemp_net"], application_data['strk_ben_gross'], application_data['strk_ben_net'],
+                application_data["work_comp_gross"], application_data['work_comp_net'], application_data['alim_gross'],
+                application_data["alim_net"], application_data['chld_sup_gross'], application_data['chld_sup_net'],
+                application_data["mil_all_gross"], application_data['mil_all_net'], application_data['pen_gross'],
+                application_data["pen_net"], application_data['inc_gross'], application_data['inc_net'],
+                application_data["rent"], application_data['utilities'], application_data['car'], application_data['groceries'],
+                application_data["credit"], application_data['other_descr'], application_data['other'],
+                application_data["checking"], application_data['saving'], application_data['CDs_IRAs'],
+                application_data["other_invst"], application_data["properties"], application_data["employer_name"],
+                application_data["spouse_employer_name"], application_data["employer_phone"],
+                application_data["spouse_employer_phone"], application_data['employer_address'],
+                application_data["spouse_employer_address"], application_data["occupation"],
+                application_data["spouse_occupation"], application_data["medicaid"], application_data["county"],
+                application_data["donate"], application_data["liability"], application_data["assist"],
+                application_data["assist_identity"], application_data["assist_amnt"], application_data["other_info"],
+                application_data["lost_earnings"], application_data["lost_time"]
+            )
+        elif (
+            application_data["facility"] == "Texas Health Center for Diagnostics & Surgery Plano"
+            or application_data["facility"] == "Texas Health Harris Methodist Southlake"
+            or application_data["facility"] == "Texas Health Presbyterian Hospital Flower Mound"
+            or application_data["facility"] == "Texas Health Presbyterian Hospital Rockwall"
+            or application_data["facility"] == "Texas Institute for Surgery at Texas Health Presbyterian Dallas"
+        ):
+            createpdf.fill_out_THP_application(
+                "static/" + session["pdf_id"], application_data["curr_date"], application_data["guarantor_name"],
+                application_data["last_name"], application_data["first_name"], application_data["MI"], application_data["DOS"],
+                application_data["hospital_acct"], application_data['medical_rcrd'], application_data['facility'], application_data['social_security'],
+                application_data["DOB"], application_data['marital_status'], application_data['minors'],
+                application_data["living_with"], application_data['legal_minor'], application_data['patient_employed'],
+                application_data["spouse_employed"], application_data['med_insurance'], application_data['disability'],
+                application_data["disability_length"], application_data['veteran'], application_data['spouse_name'],
+                application_data["child1_name"], application_data['child1_age'], application_data['child2_name'],
+                application_data["child2_age"], application_data['child3_name'], application_data['child3_age'],
+                application_data["child4_name"], application_data['child4_age'], application_data['patient_gross'],
+                application_data["patient_net"], application_data['spouse_gross'], application_data['spouse_net'],
+                application_data["dependants_gross"], application_data['dependants_net'], application_data['pub_asst_gross'],
+                application_data["pub_asst_net"], application_data['food_stamps_gross'], application_data['food_stamps_net'],
+                application_data["soc_serc_gross"], application_data['soc_serc_net'], application_data['unemp_gross'],
+                application_data["unemp_net"], application_data['strk_ben_gross'], application_data['strk_ben_net'],
+                application_data["work_comp_gross"], application_data['work_comp_net'], application_data['alim_gross'],
+                application_data["alim_net"], application_data['chld_sup_gross'], application_data['chld_sup_net'],
+                application_data["mil_all_gross"], application_data['mil_all_net'], application_data['pen_gross'],
+                application_data["pen_net"], application_data['inc_gross'], application_data['inc_net'],
+                application_data["rent"], application_data['utilities'], application_data['car'], application_data['groceries'],
+                application_data["credit"], application_data['other_descr'], application_data['other'],
+                application_data["checking"], application_data['saving'], application_data['CDs_IRAs'],
+                application_data["other_invst"], application_data["properties"], application_data["employer_name"],
+                application_data["spouse_employer_name"], application_data["employer_phone"],
+                application_data["spouse_employer_phone"], application_data['employer_address'],
+                application_data["spouse_employer_address"], application_data["occupation"],
+                application_data["spouse_occupation"], application_data["medicaid"], application_data["county"],
+                application_data["donate"], application_data["liability"], application_data["assist"],
+                application_data["assist_identity"], application_data["assist_amnt"], application_data["other_info"],
+                application_data["lost_earnings"], application_data["lost_time"]
+            )
+        else:
+            createpdf.fill_out_charitycare_application(
+                "static/" + session["pdf_id"], application_data["curr_date"], application_data["guarantor_name"],
+                application_data["last_name"], application_data["first_name"], application_data["MI"], application_data["DOS"],
+                application_data["hospital_acct"], application_data['medical_rcrd'], application_data['facility'], application_data['social_security'],
+                application_data["DOB"], application_data['marital_status'], application_data['minors'],
+                application_data["living_with"], application_data['legal_minor'], application_data['patient_employed'],
+                application_data["spouse_employed"], application_data['med_insurance'], application_data['disability'],
+                application_data["disability_length"], application_data['veteran'], application_data['spouse_name'],
+                application_data["child1_name"], application_data['child1_age'], application_data['child2_name'],
+                application_data["child2_age"], application_data['child3_name'], application_data['child3_age'],
+                application_data["child4_name"], application_data['child4_age'], application_data['patient_gross'],
+                application_data["patient_net"], application_data['spouse_gross'], application_data['spouse_net'],
+                application_data["dependants_gross"], application_data['dependants_net'], application_data['pub_asst_gross'],
+                application_data["pub_asst_net"], application_data['food_stamps_gross'], application_data['food_stamps_net'],
+                application_data["soc_serc_gross"], application_data['soc_serc_net'], application_data['unemp_gross'],
+                application_data["unemp_net"], application_data['strk_ben_gross'], application_data['strk_ben_net'],
+                application_data["work_comp_gross"], application_data['work_comp_net'], application_data['alim_gross'],
+                application_data["alim_net"], application_data['chld_sup_gross'], application_data['chld_sup_net'],
+                application_data["mil_all_gross"], application_data['mil_all_net'], application_data['pen_gross'],
+                application_data["pen_net"], application_data['inc_gross'], application_data['inc_net'],
+                application_data["rent"], application_data['utilities'], application_data['car'], application_data['groceries'],
+                application_data["credit"], application_data['other_descr'], application_data['other'],
+                application_data["checking"], application_data['saving'], application_data['CDs_IRAs'],
+                application_data["other_invst"], application_data["properties"], application_data["employer_name"],
+                application_data["spouse_employer_name"], application_data["employer_phone"],
+                application_data["spouse_employer_phone"], application_data['employer_address'],
+                application_data["spouse_employer_address"], application_data["occupation"],
+                application_data["spouse_occupation"], application_data["medicaid"], application_data["county"],
+                application_data["donate"], application_data["liability"], application_data["assist"],
+                application_data["assist_identity"], application_data["assist_amnt"], application_data["other_info"],
+                application_data["lost_earnings"], application_data["lost_time"]
+            )
+        return render_template(
+            "completed_application.html",
+            pdf_src = session['pdf_id']
+        )
     else:
         return redirect("/home")

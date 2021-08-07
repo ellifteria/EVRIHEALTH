@@ -137,7 +137,7 @@ def fill_out_THP_application(
         0: [
             [curr_date, 1.5*inch, LETTER[1] - 2.1*inch],
             [guarantor_name, 5.3*inch, LETTER[1] - 2.1*inch],
-            [first_name + " " + last_name, 2.1*inch, LETTER[1] - 2.4*inch],
+            [first_name + " " + MI + " " + last_name, 2.1*inch, LETTER[1] - 2.4*inch],
             [DOS, 5.1*inch, LETTER[1] - 2.4*inch],
             [hospital_acct, 2.35*inch, LETTER[1] - 2.7*inch],
             [medical_rcrd, 5.25*inch, LETTER[1] - 2.7*inch],
@@ -360,7 +360,7 @@ def fill_out_charitycare_application(
         0: [
             [curr_date, 1.5*inch, LETTER[1] - 2.1*inch],
             [guarantor_name, 5.3*inch, LETTER[1] - 2.1*inch],
-            [first_name + " " + last_name, 2.1*inch, LETTER[1] - 2.44*inch],
+            [first_name + " " + MI + " " + last_name, 2.1*inch, LETTER[1] - 2.44*inch],
             [DOS, 6.27*inch, LETTER[1] - 2.44*inch],
             [hospital_acct, 2.35*inch, LETTER[1] - 2.76*inch],
             [medical_rcrd, 6.41*inch, LETTER[1] - 2.76*inch],
@@ -559,7 +559,7 @@ def fill_out_USMDAcharitycare_application(
         0: [
             [curr_date, 1.5*inch, LETTER[1] - 2.43*inch],
             [guarantor_name, 5.3*inch, LETTER[1] - 2.43*inch],
-            [first_name + " " + last_name, 2.1*inch, LETTER[1] - 2.81*inch],
+            [first_name + " " + MI + " " + last_name, 2.1*inch, LETTER[1] - 2.81*inch],
             [DOS, 6.27*inch, LETTER[1] - 2.81*inch],
             [hospital_acct, 2.35*inch, LETTER[1] - 3.20*inch],
             [medical_rcrd, 6.41*inch, LETTER[1] - 3.20*inch]

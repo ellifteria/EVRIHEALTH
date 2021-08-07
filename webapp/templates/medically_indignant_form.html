@@ -3,7 +3,7 @@
 Eligibility Test
 {% endblock %}
 {% block bodycontent %}
-<h2>Medically Indignant Eligibility Test</h2>
+<h1>Medically Indignant Eligibility Test</h1>
 <p>Unfortunately, you don't qualify for full balance discount financially indignant financial assistant. However, you may qualify for some financial assistance.</p>
 <form action="/medicallyresult" method="POST">
     <p>Household Size: <input type="number" name="household_size" value="{{ household_size }}" min="1" step="1"/></p>
@@ -11,6 +11,5 @@ Eligibility Test
     <p>Balance Due: $<input type="number" name="balance_due" value="{{ balance_due }}" min="0"/></p>
     <p><input type="submit" value="Submit"/></p>
 </form>
-<!--TODO: replace values with session stored values-->
 <!--TODO: add link to page to obtain estimates for hospital costs from chargemasters-->
 {% endblock bodycontent %}
