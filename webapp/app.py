@@ -55,6 +55,7 @@ def redirect_to_home():
 @app.route("/home")
 def home():
     create_blank_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template("home.html")
 
 #TODO: create about us page
@@ -63,6 +64,7 @@ def home():
 @app.route("/financiallytest")
 def financially_indignant_form():
     create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template(
         "financially_indignant_form.html",
         household_size = session['household_size'],
@@ -72,11 +74,16 @@ def financially_indignant_form():
 @app.route("/financiallyresult", methods = ["POST", "GET"])
 def financially_indignant_result():
     create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     if request.method == "POST":
         session['household_size'] = household_size = int(request.form["household_size"])
         session['estimated_annual_income'] = estimated_annual_income = int(request.form["estimated_annual_income"])
         if charitycarealgorithm.determine_financially_indignant(household_size, estimated_annual_income) != 0:
-            return render_template("financially_indignant_qualified.html")
+            return render_template(
+                "qualify_success_results.html",
+                qualification_type = "Financially",
+                pct_discount=100
+            )
         else:
             return redirect("/medicallytest")
     else:
@@ -85,6 +92,7 @@ def financially_indignant_result():
 @app.route("/medicallytest")
 def medically_indignant_form():
     create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template(
         "medically_indignant_form.html",
         household_size = session['household_size'],
@@ -95,6 +103,7 @@ def medically_indignant_form():
 @app.route("/medicallyresult", methods = ["POST", "GET"])
 def medically_indignant_result():
     create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     if request.method == "POST":
         session['household_size'] = household_size = int(request.form["household_size"])
         session['estimated_annual_income'] = estimated_annual_income = int(request.form["estimated_annual_income"])
@@ -102,21 +111,25 @@ def medically_indignant_result():
         if charitycarealgorithm.determine_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
             if charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
                 return render_template(
-                    "catastrophic_medically_indignant_qualified.html",
+                    "qualify_success_results.html",
+                    qualification_type = "Catastrophic Medically",
                     pct_discount=100*charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due)
                 )
             return render_template(
-                    "medically_indignant_qualified.html",
+                    "qualify_success_results.html",
+                    qualification_type = "Medically",
                     pct_discount=100*charitycarealgorithm.determine_medically_indignant(household_size, estimated_annual_income, balance_due)
                 )
         elif charitycarealgorithm.determine_tier2_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
             return render_template(
-                    "tier2_medically_indignant_qualified.html",
+                    "qualify_success_results.html",
+                    qualification_type = "Tier 2 Medically",
                     pct_discount=100*charitycarealgorithm.determine_tier2_medically_indignant(household_size, estimated_annual_income, balance_due)
                 )
         elif charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
             return render_template(
-                "catastrophic_medically_indignant_qualified.html",
+                "qualify_success_results.html",
+                qualification_type = "Catastrophic Medically",
                 pct_discount=100*charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due)
             )
         else:
@@ -126,23 +139,32 @@ def medically_indignant_result():
 
 @app.route("/blankapplication")
 def blank_application():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template("blank_application.html")
 
 @app.route("/blankapplicationTHP")
 def blank_application_THP():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template("blank_application_THP.html")
 
 @app.route("/blankapplicationUSMDA")
 def blank_application_USMDA():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template("blank_application_USMDA.html")
 
 @app.route("/completeapplication")
 def complete_application():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template("application_completer.html")
 
 @app.route("/completedapplication", methods = ["POST", "GET"])
 def display_completed_application():
     create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     if request.method == "POST":
         application_data = {}
         for key, value in request.form.items():
@@ -258,3 +280,9 @@ def display_completed_application():
         )
     else:
         return redirect("/home")
+
+@app.route("/finished")
+def final_page():
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
+    clear_session()
+    return render_template("finished.html")
