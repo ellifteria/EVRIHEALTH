@@ -1091,4 +1091,4 @@ def final_page():
     return render_template("finished.html")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
