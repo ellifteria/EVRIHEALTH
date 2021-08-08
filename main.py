@@ -1,4 +1,3 @@
-import re
 from flask import Flask, render_template, request, redirect, session
 import datetime
 import random
