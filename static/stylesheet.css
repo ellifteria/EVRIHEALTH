@@ -50,7 +50,7 @@ ul.topnav li.menu {
     font-size: 31px;
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 1400px) {
     ul.topnav li:not(:first-child){
         display: none;
     }
@@ -60,7 +60,7 @@ ul.topnav li.menu {
     }
 }
 
-@media screen and (max-width: 750px) {
+@media screen and (max-width: 1400px) {
     ul.topnav.responsive {
         position: fixed;
     }
