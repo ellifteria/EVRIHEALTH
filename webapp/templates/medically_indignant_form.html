@@ -8,8 +8,11 @@ Eligibility Test
 <form action="/medicallyresult" method="POST">
     <p>Household Size: <input type="number" name="household_size" value="{{ household_size }}" min="1" step="1"/></p>
     <p>Estimated Annual Income: $<input type="number" name="estimated_annual_income" value="{{ estimated_annual_income }}" min="0"/></p>
-    <p>Balance Due: $<input type="number" name="balance_due" value="{{ balance_due }}" min="0"/></p>
+    <p>Balance Due{{ is_estimate }}: $<input type="number" name="balance_due" value="{{ balance_due }}" min="0"/></p>
     <p><input type="submit" value="Submit"/></p>
 </form>
-<!--TODO: add link to page to obtain estimates for hospital costs from chargemasters-->
+<p>Don't have a balance due? Get an estimate here!</p>
+<form>
+    <button class="btn" type="submit" formaction="/locationsearch">Get Cost Estimate</button>
+</form>
 {% endblock bodycontent %}

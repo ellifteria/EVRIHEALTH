@@ -6,6 +6,7 @@ import string
 
 import charitycarealgorithm
 import createpdf
+import getcosts
 
 app = Flask(__name__)
 secret_key = ""
@@ -34,6 +35,8 @@ def create_session():
         session['estimated_annual_income'] = 0
     if 'balance_due' not in session:
         session['balance_due'] = 0
+    if 'estimated_cost' not in session:
+        session['estimated_cost'] = 0
 
 def create_blank_session():
     if 'pdf_id' not in session:
@@ -41,6 +44,7 @@ def create_blank_session():
     session['household_size'] = 1
     session['estimated_annual_income'] = 0
     session['balance_due'] = 0
+    session['estimated_cost'] = 0
 
 def clear_session():
     [session.pop(key) for key in list(session.keys())]
@@ -89,15 +93,57 @@ def financially_indignant_result():
     else:
         return redirect("/home")
 
-@app.route("/medicallytest")
-def medically_indignant_form():
+@app.route("/locationsearch")
+def select_location():
     create_session()
     createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template(
-        "medically_indignant_form.html",
-        household_size = session['household_size'],
-        estimated_annual_income = session['estimated_annual_income'],
-        balance_due = session['balance_due'],
+        "location_search.html"
+    )
+
+@app.route("/chargemaster", methods = ["POST", "GET"])
+def select_procedure():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
+    if request.method == "GET":
+        return redirect("/locationsearch")
+    location = request.form["facility"]
+    return render_template(
+        "chargemaster.html",
+        procedures = getcosts.get_chargemaster(location)
+    )
+
+@app.route("/revealcost", methods = ["POST", "GET"])
+def reveal_cost():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
+    if request.method == "GET":
+        return redirect("/locationsearch")
+    session['estimated_cost'] = int(float(request.form["cost"]))
+    return render_template(
+        "reveal_cost.html",
+        cost = session['estimated_cost']
+    )
+
+@app.route("/medicallytest", methods=["POST", "GET"])
+def medically_indignant_form():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
+    if session['estimated_cost'] != 0:
+        return render_template(
+            "medically_indignant_form.html",
+            household_size = session['household_size'],
+            estimated_annual_income = session['estimated_annual_income'],
+            balance_due = session['estimated_cost'],
+            is_estimate = " (Estimate)"
+        )
+    else:
+        return render_template(
+            "medically_indignant_form.html",
+            household_size = session['household_size'],
+            estimated_annual_income = session['estimated_annual_income'],
+            balance_due = session['estimated_cost'],
+            is_estimate = " (Estimate)"
     )
 
 @app.route("/medicallyresult", methods = ["POST", "GET"])
@@ -108,6 +154,12 @@ def medically_indignant_result():
         session['household_size'] = household_size = int(request.form["household_size"])
         session['estimated_annual_income'] = estimated_annual_income = int(request.form["estimated_annual_income"])
         session['balance_due'] = balance_due = int(request.form["balance_due"])
+        if charitycarealgorithm.determine_financially_indignant(household_size, estimated_annual_income) != 0:
+            return render_template(
+                "qualify_success_results.html",
+                qualification_type = "Financially",
+                pct_discount=100
+            )
         if charitycarealgorithm.determine_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
             if charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due) != 0:
                 return render_template(
@@ -133,7 +185,7 @@ def medically_indignant_result():
                 pct_discount=100*charitycarealgorithm.determine_catastrophic_medically_indignant(household_size, estimated_annual_income, balance_due)
             )
         else:
-            return "Sorry, you don't qualify"
+            return render_template("qualify_failure_results.html")
     else:
         return redirect("/home")
 

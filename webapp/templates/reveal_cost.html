@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}
+Procedure Cost
+{% endblock %}
+{% block bodycontent %}
+<h1>${{ cost }}</h1>
+<p>Is the average cost of the selected procedure at the selected location.</p>
+<p>Select a different location and procedure:</p>
+<form>
+    <button class="btn" type="submit" formaction="/locationsearch">Back to Locations</button>
+</form>
+<p>Check Eligibility:</p>
+<form action="/medicallytest" method="POST">
+    <input type="submit" name="upvote" value="Eligibility Test" />
+</form>
+{% endblock bodycontent %}

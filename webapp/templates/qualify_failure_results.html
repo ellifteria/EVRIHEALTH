@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}
+Eligibility Result
+{% endblock %}
+{% block bodycontent %}
+<h1>Financial Assistance Eligibility Results</h1>
+<h1>It Doesn't Look Like You Qualify</h1>
+<h3>Based on the financial information you have provided, it appears as though you not not likely qualify for financial assistance.</h3>
+<p>The full financial assistance policy of the Texas Health system can be found below.</p>
+<p>If you would like to apply for financial assistance anyway, you are able to print out a blank copy of the financial assistance application from us, or use our site to digitally complete the application.</p>
+<form>
+    <button class="btn" onclick="window.open('https://www.texashealth.org/About-Texas-Health/Insurance-and-Costs/Financial-Assistance','_blank'); return false;">Read Policy</button>
+    <button class="btn" type="submit" formaction="/completeapplication">Fill Out Application Digitally</button>
+    <button class="btn" type="submit" formaction="/blankapplication">Print Blank Application</button>
+</form>
+<p>You can check the average cost of various procedures offered across the Texas Health system.</p>
+<form>
+    <button class="btn" type="submit" formaction="/locationsearch">Get Cost Estimate</button>
+</form>
+{% endblock %}

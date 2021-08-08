@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}
+Location Search
+{% endblock %}
+{% block bodycontent %}
+<h1>Select Your Location</h1>
+<p>Select a location to get an estimate of the cost of your procedure using the Texas Health chargemasters.</p>
+<label for="facility">Facility: </label>
+<form action="/chargemaster" method="POST">
+    <select name="facility">
+        <option value="TexasHealthAllen">Texas Health Allen</option>
+        <option value="TexasHealthAlliance">Texas Health Alliance</option>
+        <option value="TexasHealthArlingtonMemorial">Texas Health Arlington Memorial</option>
+        <option value="TexasHealthAzle">Texas Health Azle</option>
+        <option value="TexasHealthCenterforDiagnosticsSurgeryPlano">Texas Health Center for Diagnostics & Surgery Plano</option>
+        <option value="TexasHealthCleburne">Texas Health Cleburne</option>
+        <option value="TexasHealthDallas">Texas Health Dallas</option>
+        <option value="TexasHealthDenton">Texas Health Denton</option>
+        <option value="TexasHealthPresbyterianHospitalFlowerMound">Texas Health Presbyterian Hospital Flower Mound</option>
+        <option value="TexasHealthFortWorth">Texas Health Fort Worth</option>
+        <option value="TexasHealthHeartVascularHospitalArlington">Texas Health Heart & Vascular</option>
+        <option value="TexasHealthFrisco">Texas Health Frisco</option>
+        <option value="TexasHealthHEB">Texas Health HEB</option>
+        <option value="TexasHealthKaufman">Texas Health Kaufman</option>
+        <option value="TexasHealthPlano">Texas Health Plano</option>
+        <option value="TexasHealthRecoveryWellnessCenter">Texas Health Recovery & Wellness Center</option>
+        <option value="TexasHealthPresbyterianHospitalRockwall">Texas Health Presbyterian Hospital Rockwall</option>
+        <option value="TexasHealthHarrisMethodistSouthlake">Texas Heath Harris Methodist Hospital Southlake</option>
+        <option value="TexasHealthSouthwestFortWorth">Texas Health Southwest Fort Worth</option>
+        <option value="TexasHealthSpecialtyHospital">Texas Health Specialty</option>
+        <option value="TexasHealthStephenville">Texas Health Stephenville</option>
+    </select>
+    <p><input type="submit" value="Submit"/></p>
+</form>
+{% endblock bodycontent %}

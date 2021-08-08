@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}
+Chargemaster
+{% endblock %}
+{% block bodycontent %}
+<h1>Select Your Procedure</h1>
+<label for="facility">Procedure: </label>
+<form action="/revealcost" method="POST">
+    <select name="cost">
+        {% for procedure, cost in procedures.items() %}
+        <option value="{{ cost }}">{{ procedure }}</option>
+        {% endfor %}
+    </select>
+    <p><input type="submit" value="Submit"/></p>
+</form>
+<p>Select a different location:</p>
+<form>
+    <button class="btn" type="submit" formaction="/locationsearch">Back to Locations</button>
+</form>
+{% endblock bodycontent %}
