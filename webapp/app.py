@@ -63,7 +63,14 @@ def home():
     return render_template("home.html")
 
 #TODO: create about us page
+@app.route("/about")
+def display_about():
+    return render_template("about.html")
+
 #TODO: create about charity care page
+@app.route("/charitycare")
+def display_charity_care():
+    return render_template("charity_care.html")
 
 @app.route("/financiallytest")
 def financially_indignant_form():
@@ -122,7 +129,7 @@ def reveal_cost():
     session['estimated_cost'] = int(float(request.form["cost"]))
     return render_template(
         "reveal_cost.html",
-        cost = session['estimated_cost']
+        cost = "{:,}".format(session['estimated_cost'])
     )
 
 @app.route("/medicallytest", methods=["POST", "GET"])
