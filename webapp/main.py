@@ -64,10 +64,14 @@ def home():
 
 @app.route("/about")
 def display_about():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template("about.html")
 
 @app.route("/charitycare")
 def display_charity_care():
+    create_session()
+    createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template("charity_care.html")
 
 @app.route("/financiallytest")
@@ -343,3 +347,6 @@ def final_page():
     createpdf.delete_file("static/{}".format(session['pdf_id']))
     clear_session()
     return render_template("finished.html")
+
+if __name__ == "__main__":
+    app.run(debug=True)
