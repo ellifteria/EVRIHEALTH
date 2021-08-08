@@ -4,4 +4,18 @@ Charity Care
 {% endblock %}
 {% block bodycontent %}
 <h1>About Charity Care</h1>
+<p>According to Gallup, in 2019, 1 in 4 Americans claimed that they, or a family member, delayed treatment for a serious medical condition due to the cost of healthcare.</p>
+<p>Including those who put off treatment for a less serious condition, that proportion rises to 1 in 3.</p>
+<p>Delaying healthcare due to the cost can often result in long term and severe consequences for your health; fortunately, the cost of healthcare need not be such a barrier.</p>
+<p>Under Texas law, all non-profit hospitals are required to provide some health care free of charge to those who either have no health insurance or cannot afford to pay for hospital care; this is known as "charity care."</p>
+<p>Charity care can even be applied for after you have been billed for care by the hospital or a collection agency.</p>
+<p>More information about charity care in Texas can be found at this website:</p>
+<form>
+    <button class="btn" onclick="window.open('https://www2.texasattorneygeneral.gov/faq/access-to-health-care-qa','_blank'); return false;">Charity Care Info</button>
+</form>
+<p>Click here to check your eligibility for charity care or fill out your charity care application digitally:</p>
+<form>
+    <button class="btn" type="submit" formaction="/financiallytest">Check Charity Care Eligibility</button>
+    <button class="btn" type="submit" formaction="/completeapplication">Fill Out Application Digitally</button>
+</form>
 {% endblock bodycontent %}

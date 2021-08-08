@@ -4,4 +4,15 @@ About
 {% endblock %}
 {% block bodycontent %}
 <h1>About</h1>
+<h2>Access to Healthcare Should be a Right, Not a Privilige</h2>
+<p>Using this online tool, it is easy to determine if you are able to receive free or discounted medical care due to your financial situation.</p>
+<p>Click here to learn more about charity care:</p>
+<form>
+    <button class="btn" type="submit" formaction="/charitycare"">Charity Care Info</button>
+</form>
+<p>Click here to check your eligibility for charity care or fill out your charity care application digitally:</p>
+<form>
+    <button class="btn" type="submit" formaction="/financiallytest">Check Charity Care Eligibility</button>
+    <button class="btn" type="submit" formaction="/completeapplication">Fill Out Application Digitally</button>
+</form>
 {% endblock bodycontent %}

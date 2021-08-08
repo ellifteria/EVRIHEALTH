@@ -62,12 +62,10 @@ def home():
     createpdf.delete_file("static/{}".format(session['pdf_id']))
     return render_template("home.html")
 
-#TODO: create about us page
 @app.route("/about")
 def display_about():
     return render_template("about.html")
 
-#TODO: create about charity care page
 @app.route("/charitycare")
 def display_charity_care():
     return render_template("charity_care.html")
@@ -150,7 +148,7 @@ def medically_indignant_form():
             household_size = session['household_size'],
             estimated_annual_income = session['estimated_annual_income'],
             balance_due = session['estimated_cost'],
-            is_estimate = " (Estimate)"
+            is_estimate = ""
     )
 
 @app.route("/medicallyresult", methods = ["POST", "GET"])
