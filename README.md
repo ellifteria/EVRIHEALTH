@@ -1,3 +1,11 @@
+# EVRIHEALTH
+
+## Because everyone deserves access to healthcare.
+
+1. Video demo: [https://youtu.be/yBuReCbeZIU](https://youtu.be/yBuReCbeZIU)
+
+---
+
 ## Inspiration
 According to Gallup, in 2019, 1 in 4 Americans claimed that they, or a family member, delayed treatment for a serious medical condition due to the cost of healthcare. In the same year, taking into account those who delayed treatment for a less serious medical condition, 1 in 3 Americans delayed seeking medical care due to their financial constraints. Since then, the problem has only gotten significantly worse. The consequences of delaying medical care include deteriorating health conditions, later diagnoses, and earlier deaths. That this problem is occurring in the wealthiest nation on Earth is especially lamentable. The problem is perhaps worst in the state of Texas, which has the highest medically uninsured population in the entire country. 
 
