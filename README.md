@@ -2,8 +2,6 @@
 
 ## Because everyone deserves access to healthcare.
 
-1. Video demo: [https://youtu.be/yBuReCbeZIU](https://youtu.be/yBuReCbeZIU)
-
 ---
 
 ## Inspiration
